@@ -1,0 +1,784 @@
+@use "sass:math";
+
+// Підключення міксинів ===========================================================================================================================================================================================================================================================================
+@import "base/mixins";
+
+// Підключення шрифтів ===========================================================================================================================================================================================================================================================================
+//&display=swap - додати при підключенні через плагін
+@import url("https://fonts.googleapis.com/css?family=League+Spartan:300,regular,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:regular,500&display=swap");
+// Підключити, якщо є локальні файли шрифтів
+//@import "fonts/fonts";
+
+// Підключення іконкових шрифтів ==============================================================================================================================================================================================================================================================================
+// Підключити, якщо є файл іконкового шрифту
+//@import "fonts/icons";
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// Налаштування шаблону ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// За замовчуванням шрифт ==============================================================================================================================================================================================================================================================================
+$fontFamily: "League Spartan";
+$fontSize: rem(18); // де 14(px) - розмір шрифту за замовчуванням з макету
+
+// Основні кольори
+$mainColor: #fff; // Колір шрифту за замовчуванням
+$greenColor: #23b123;
+
+// Налаштування адаптивної сітки ===============================================================================================================================================================================================================================================================================================
+
+// Мінімальна ширина сторінки
+$minWidth: 320;
+// Ширина полотна (макету)
+$maxWidth: 1920;
+// Ширина обмежуючого контейнера (0 = немає обмеження)
+$maxWidthContainer: 1620;
+// Загальний відступ у контейнера
+// (30 = по 15px ліворуч і праворуч, 0 = немає відступу)
+$containerPadding: 30;
+
+// Ширина спрацьовування першого брейкпоінту
+$containerWidth: $maxWidthContainer + $containerPadding;
+
+// Брейк-поїнти
+$pc: em($containerWidth); // ПК, ноутбуки, деякі планшети у горизонтальному положенні
+$tablet: em(991.98); // Планшети, деякі телефони в горизонтальному положенні
+$mobile: em(767.98); // Телефони L
+$mobileSmall: em(479.98); // Телефони S
+
+// Тип адаптива:
+// 1 = чуйність (у контейнера немає брейкпоінтів),
+// 2 = по брейк-поїнт (контейнер змінює свою ширину по брейк-поїнт)
+$responsiveType: 1;
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// Обнулення ============================================================================================================================================================================================== =============================================================================================== ===============================================================================================
+@import "base/null";
+
+// Стилі тега BODY ============================================================================================================================================================================================================================================================================================================================================================================================
+
+body {
+	background-color: #263238;
+	// Скролл заблоковано
+	.lock & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	}
+	// Сайт завантажений
+	.loaded & {
+	}
+}
+
+// Оболонка wrapper ============================================================================================================================================================================================================================================================================================================================================================================================================================================
+.wrapper {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	@supports (overflow: clip) {
+		overflow: clip;
+	}
+	// Притискаємо footer
+	> main {
+	}
+	// Фікс для слайдерів
+	> * {
+		min-width: 0;
+	}
+}
+// Обмежуючий контейнер ======================================================================================================================================================================================================================
+
+/*
+(i) Стилі будуть застосовуватись до
+всіх класів, що містять *__container
+Наприклад header__container, main__container і т.п.
+Сніппет (HTML): cnt
+*/
+[class*="__container"] {
+	max-width: rem(1420);
+	margin: 0 auto;
+}
+@if ($responsiveType==1) {
+	// Чуйна
+	[class*="__container-big"] {
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+			margin: 0 auto;
+		}
+		@if ($containerPadding>0) {
+			@if ($maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			} @else {
+				@include adaptiveValue("padding-left", math.div($containerPadding, 2), 15);
+				@include adaptiveValue("padding-right", math.div($containerPadding, 2), 15);
+			}
+		}
+	}
+} @else {
+	// Брейк-поїнтами
+	[class*="__container"] {
+		margin: 0 auto;
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+		} @else {
+			@if ($containerPadding>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+		@media (max-width: $pc) {
+			max-width: rem(970);
+		}
+		@media (max-width: $tablet) {
+			max-width: rem(750);
+		}
+		@media (max-width: $mobile) {
+			max-width: none;
+			@if ($containerPadding>0 and $maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+	}
+}
+
+// Підключення базових стилів, шаблонів (заготівель) та допоміжних класів
+// Для підключення/вимкнення конкретних стилів дивись base.scss
+@import "base";
+
+// Підключення стилів загальних елементів проекту
+@import "common";
+
+// Підключення стилів окремих блоків
+@import "header";
+@import "footer";
+
+//======================================================================================
+// Pages
+.page {
+	flex: 1 1 auto;
+	// .page__main
+	&__main {
+	}
+	// .page__partners
+	&__partners {
+	}
+	// .page__how
+	&__how {
+	}
+	// .page__pathway
+	&__pathway {
+	}
+	// .page__why
+	&__why {
+	}
+	// .page__reviews
+	&__reviews {
+	}
+	// .page__download
+	&__download {
+	}
+}
+
+// Підключення стилів окремих сторінок
+@import "home";
+//======================================================================================
+// Main-block
+
+.main-block {
+	// .main-block__container-big
+	&__container-big {
+		position: relative;
+	}
+	// .main-block__container
+	&__container {
+	}
+	// .main-block__content
+	&__content {
+		position: relative;
+		z-index: 2;
+		@include adaptiveValue("padding-top", 250, 130);
+		@include adaptiveValue("padding-bottom", 200, 50);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+	}
+	// .main-block__title
+	&__title {
+		max-width: rem(750);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 69, 30);
+		}
+	}
+	// .main-block__text
+	&__text {
+		line-height: 180%;
+		max-width: rem(570);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 20);
+		}
+	}
+	// .main-block__form
+	&__form {
+		@media (max-width: em(430)) {
+			width: 100%;
+		}
+	}
+	// .main-block__icons
+	&__icons {
+	}
+}
+
+.icons-main-block {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	pointer-events: none;
+	@media (max-width: $mobile) {
+		opacity: 0.2;
+	}
+	// .icons-main-block__item
+	&__item {
+		position: absolute;
+		// .icons-main-block__item_1
+		&_1 {
+			top: percent(675, 974);
+			left: rem(15);
+		}
+		// .icons-main-block__item_2
+		&_2 {
+			top: percent(380, 974);
+			left: percent(237, 1620);
+		}
+		// .icons-main-block__item_3
+		&_3 {
+			top: percent(757, 974);
+			left: percent(403, 1620);
+		}
+		// .icons-main-block__item_4
+		&_4 {
+			top: percent(134, 974);
+			left: percent(1149, 1620);
+		}
+		// .icons-main-block__item_5
+		&_5 {
+			top: percent(419, 974);
+			left: percent(1325, 1620);
+		}
+		// .icons-main-block__item_6
+		&_6 {
+			top: percent(776, 974);
+			left: percent(1321, 1620);
+		}
+		// .icons-main-block__item_7
+		&_7 {
+			top: percent(367, 974);
+			right: rem(15);
+		}
+	}
+	// .icons-main-block__circle
+	&__circle {
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		@include adaptiveValue("width", 585, 350);
+		@include adaptiveValue("height", 585, 350);
+		&::before {
+			content: "";
+			display: block;
+			border-radius: 50%;
+			border: rem(1) solid $mainColor;
+			width: 100%;
+			height: 100%;
+		}
+		// .icons-main-block__circle_1
+		&_1 {
+			&::before {
+				transform: translate(calc(-50% - rem(28)), -37%);
+			}
+		}
+		// .icons-main-block__circle_2
+		&_2 {
+			&::before {
+				transform: translate(calc(-50% + rem(27)), -46%);
+			}
+		}
+	}
+}
+//======================================================================================
+// Partners
+.partners {
+	@include adaptiveValue("padding-bottom", 200, 50);
+	// .partners__container
+	&__container {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: rem(25);
+		@media (max-width: em(1100)) {
+			justify-content: center;
+		}
+	}
+	// .partners__item
+	&__item {
+		text-align: center;
+		img {
+			max-width: 100%;
+		}
+	}
+}
+//======================================================================================
+// How it works(How)
+.how {
+	@include adaptiveValue("padding-bottom", 100, 25);
+	// .how__container
+	&__container {
+		display: grid;
+		row-gap: rem(30);
+		@media (min-width: $tablet) {
+			grid-template-columns: 1fr percent(750, 1420);
+		}
+	}
+	// .how__content
+	&__content {
+		@include adaptiveValue("padding-right", 95, 30, 2, 1420, 992);
+		@media (max-width: $mobileSmall) {
+			text-align: center;
+		}
+	}
+	// .how__title
+	&__title {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 30, 20);
+		}
+	}
+	// .how__text
+	&__text {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+	}
+	// .how__steps
+	&__steps {
+	}
+	// .how__image
+	&__image {
+	}
+}
+.steps-how {
+	// .steps-how__item
+	&__item {
+		@media (min-width: $tablet) {
+			max-width: rem(490);
+		}
+		display: flex;
+		align-items: center;
+		gap: rem(32);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+		@media (max-width: $mobileSmall) {
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+	// .steps-how__icon
+	&__icon {
+		border-radius: 50%;
+		flex: 0 0 rem(110);
+		width: rem(110);
+		height: rem(110);
+		background-color: rgba(0, 128, 0, 0.1);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	// .steps-how__body
+	&__body {
+	}
+	// .steps-how__title
+	&__title {
+		font-weight: 700;
+		font-size: rem(20);
+		&:not(:last-child) {
+			margin-bottom: rem(16);
+		}
+	}
+	// .steps-how__text
+	&__text {
+	}
+}
+//======================================================================================
+// Pathway
+.pathway {
+	@include adaptiveValue("padding-top", 100, 25);
+	@include adaptiveValue("padding-bottom", 100, 25);
+	// .pathway__container-big
+	&__container-big {
+	}
+	// .pathway__container
+	&__container {
+		display: flex;
+		row-gap: rem(30);
+		@media (max-width: $tablet) {
+			flex-direction: column-reverse;
+		}
+	}
+	// .pathway__image
+	&__image {
+		width: 100%;
+		@media (min-width: $tablet) {
+			flex: 0 0 percent(694, 1420);
+		}
+		&.image-block {
+			@include adaptiveValue("padding-top", 100, 30);
+			@include adaptiveValue("padding-bottom", 100, 30);
+			@include adaptiveValue("padding-left", 40, 30);
+			@include adaptiveValue("padding-right", 40, 30);
+		}
+		.image-block__circle {
+			top: auto;
+			right: auto;
+			left: 0;
+			bottom: 0;
+		}
+		.image-block__circle_1 {
+			&::before {
+				transform: translate(calc(-50% + rem(18)), 20%);
+			}
+		}
+		.image-block__circle_2 {
+			&::before {
+				transform: translate(calc(-50% + rem(20)), 6%);
+			}
+		}
+	}
+	// .pathway__content
+	&__content {
+		flex: 1 1 auto;
+		@include adaptiveValue("padding-left", 126, 30, 2, 1420, 992);
+		@media (max-width: $mobileSmall) {
+			text-align: center;
+		}
+	}
+	// .pathway__title
+	&__title {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 30, 20);
+		}
+	}
+	// .pathway__text
+	&__text {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+	}
+	// .pathway__spollers
+	&__spollers {
+		display: grid;
+		gap: rem(24);
+	}
+}
+.spollers-pathway {
+	// .spollers-pathway__item
+	&__item {
+		background-color: rgba(255, 255, 255, 0.05);
+		border-radius: rem(10);
+	}
+	// .spollers-pathway__title
+	&__title {
+		width: 100%;
+		display: block;
+		text-align: left;
+		padding: rem(24) rem(30);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: rem(10);
+		line-height: 177%;
+		@include adaptiveValue("font-size", 24, 18);
+		&::after {
+			content: "";
+			background: url("@img/pathway/arrow-down.svg") center / 100% no-repeat;
+			flex: 0 0 rem(24);
+			height: rem(24);
+			transition: all 0.3s ease 0s;
+		}
+		&._spoller-active {
+			&::after {
+				transform: rotate(-180deg);
+			}
+		}
+		@media (max-width: $mobileSmall) {
+			line-height: 130%;
+			padding: rem(18) rem(20);
+		}
+	}
+	// .spollers-pathway__body
+	&__body {
+		text-align: left;
+		padding: rem(0) rem(30) rem(24) rem(30);
+		@media (max-width: $mobileSmall) {
+			padding: rem(0) rem(20) rem(18) rem(20);
+		}
+	}
+}
+//======================================================================================
+// Why
+.why {
+	@include adaptiveValue("padding-top", 100, 25);
+	@include adaptiveValue("padding-bottom", 100, 25);
+	// .why__container-big
+	&__container-big {
+	}
+	// .why__container
+	&__container {
+		display: grid;
+		row-gap: rem(30);
+		@media (min-width: $tablet) {
+			grid-template-columns: 1fr percent(680, 1420);
+		}
+	}
+	// .why__content
+	&__content {
+		@include adaptiveValue("padding-right", 177, 30, 2, 1420, 992);
+		@media (max-width: $mobileSmall) {
+			text-align: center;
+		}
+	}
+	// .why__title
+	&__title {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 30, 20);
+		}
+	}
+	// .why__text
+	&__text {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+	}
+	// .why__steps
+	&__steps {
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 55, 25);
+		}
+	}
+	// .why__button
+	&__button {
+		min-width: rem(222);
+	}
+	// .why__image
+	&__image-ibg {
+		// text-align: center;
+		// padding-bottom: percent(812, 680);
+		padding-bottom: 60%;
+		img {
+			width: 100%;
+			border-radius: rem(20);
+		}
+	}
+}
+.steps-why {
+	list-style: none;
+	counter-reset: item;
+	display: grid;
+	@include adaptiveValue("gap", 48, 20);
+	// .steps-why__item
+	&__item {
+		font-size: rem(20);
+		line-height: math.div(55, 20);
+		display: flex;
+		align-items: center;
+		@include adaptiveValue("gap", 48, 20);
+		&::before {
+			content: counter(item);
+			counter-increment: item;
+			width: rem(64);
+			height: rem(64);
+			background-color: rgba(255, 255, 255, 0.05);
+			border-radius: 50%;
+			font-weight: 600;
+			font-size: rem(36);
+			line-height: rem(70);
+			text-align: center;
+		}
+	}
+}
+//======================================================================================
+// Reviews
+.reviews {
+	@include adaptiveValue("padding-top", 100, 25);
+	@include adaptiveValue("padding-bottom", 200, 50);
+	// .reviews__container-big
+	&__container-big {
+	}
+	// .reviews__container
+	&__container {
+		display: grid;
+		align-items: center;
+		justify-items: center;
+	}
+	// .reviews__title
+	&__title {
+		text-align: center;
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 30, 20);
+		}
+	}
+	// .reviews__text
+	&__text {
+		text-align: center;
+		max-width: rem(500);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+	}
+	// .reviews__items
+	&__items {
+		display: flex;
+		@include adaptiveValue("gap", 48, 25);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 30);
+		}
+		@media (max-width: $mobileSmall) {
+			flex-direction: column;
+		}
+	}
+	// .reviews__item
+	&__item {
+		flex: 0 1 50%;
+	}
+	// .reviews__button
+	&__button {
+		min-width: rem(221);
+	}
+}
+.item-review {
+	display: flex;
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: rem(20);
+	overflow: hidden;
+	@media (max-width: $tablet) {
+		flex-direction: column;
+	}
+	// .item-review__image
+	&__image-ibg {
+		flex: 0 0 percent(300, 686);
+		// padding-bottom: percent(302, 377);
+		padding-bottom: 75%;
+	}
+	// .item-review__body
+	&__body {
+		@include adaptiveValue("padding", 32, 20);
+		display: flex;
+		flex-direction: column;
+		gap: rem(20);
+	}
+	// .item-review__text
+	&__text {
+		flex: 1 1 auto;
+	}
+	// .item-review__name
+	&__name {
+		font-weight: 600;
+	}
+}
+//======================================================================================
+// Download
+.download {
+	@include adaptiveValue("padding-bottom", 200, 50);
+	// .download__container-big
+	&__container-big {
+	}
+	// .download__container
+	&__container {
+	}
+	// .download__body
+	&__body {
+		position: relative;
+		z-index: 2;
+		@include adaptiveValue("padding-top", 70, 20);
+		@include adaptiveValue("padding-bottom", 65, 20);
+		@include adaptiveValue("padding-left", 30, 20);
+		@include adaptiveValue("padding-right", 30, 20);
+		background-color: rgba(255, 255, 255, 0.07);
+		border-radius: rem(20);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		overflow: hidden;
+	}
+	// .download__title
+	&__title {
+		max-width: rem(600);
+		&:not(:last-child) {
+			@include adaptiveValue("margin-bottom", 48, 20);
+		}
+	}
+	// .download__apps
+	&__apps {
+		position: relative;
+		z-index: 2;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+		@include adaptiveValue("gap", 24, 15);
+		// @media (max-width: $mobileSmall) {
+		// 	flex-direction: column;
+		// }
+	}
+	// .download__app
+	&__app {
+		img {
+			max-width: 100%;
+		}
+		@media (any-hover: hover) {
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+	// .download__circle
+	&__circle {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		@include adaptiveValue("width", 585, 350);
+		@include adaptiveValue("height", 585, 350);
+		&::before {
+			content: "";
+			position: absolute;
+			border-radius: 50%;
+			border: rem(1) solid rgba(255, 255, 255, 0.37);
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		// .download__circle_1
+		&_1 {
+			&::before {
+				transform: translate(-50%, -18%);
+			}
+		}
+		// .download__circle_2
+		&_2 {
+			&::before {
+				transform: translate(-50%, -6%);
+			}
+		}
+	}
+}
